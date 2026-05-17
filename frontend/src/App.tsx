@@ -21,6 +21,12 @@ export function App() {
 
   const clockMs = useMemo(() => (lastSync ? new Date(lastSync).getTime() : now), [lastSync, now]);
   const clockLabel = useMemo(() => new Date(clockMs).toLocaleTimeString("uk-UA"), [clockMs]);
+  const hideConnectionStatus = useMemo(() => {
+    const host = window.location.hostname;
+    const isGithubPages = host.endsWith("github.io");
+    const isSmallScreen = window.matchMedia?.("(max-width: 520px)")?.matches ?? false;
+    return isGithubPages && isSmallScreen;
+  }, []);
 
   useTelegramBackButton({
     enabled: true,
@@ -42,14 +48,16 @@ export function App() {
           </div>
         </div>
         <div className="status-strip" aria-label={t("status.aria")}>
-          <div className={`status-pill ${connected ? "online" : "offline"}`}>
-            <Activity size={16} />
-            {connected
-              ? t("status.live")
-              : reconnecting
-                ? t("status.reconnect")
-                : t("status.offline")}
-          </div>
+          {!hideConnectionStatus && (
+            <div className={`status-pill ${connected ? "online" : "offline"}`}>
+              <Activity size={16} />
+              {connected
+                ? t("status.live")
+                : reconnecting
+                  ? t("status.reconnect")
+                  : t("status.offline")}
+            </div>
+          )}
           <div className="status-pill">
             <Clock size={16} />
             {clockLabel}
