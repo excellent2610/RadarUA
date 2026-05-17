@@ -69,10 +69,6 @@ export function App() {
           ))}
         </aside>
       </section>
-
-      <section className="radar-disclaimer" role="note" aria-label={t("disclaimer.aria")}>
-        <p>{t("disclaimer.approx")}</p>
-      </section>
     </main>
   );
 }

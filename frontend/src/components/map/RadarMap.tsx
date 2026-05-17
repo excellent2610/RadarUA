@@ -113,8 +113,17 @@ export function RadarMap({ targets }: RadarMapProps) {
     layerRef.current = targetsLayer;
     trailLayerRef.current = trails;
 
+    // Mobile/WebView: ensure Leaflet measures container correctly after initial paint.
+    const invalidate = () => map.invalidateSize({ animate: false });
+    const timeoutId = window.setTimeout(invalidate, 0);
+    window.addEventListener("resize", invalidate);
+    window.addEventListener("orientationchange", invalidate);
+
     return () => {
       window.cancelAnimationFrame(rafRef.current);
+      window.clearTimeout(timeoutId);
+      window.removeEventListener("resize", invalidate);
+      window.removeEventListener("orientationchange", invalidate);
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
@@ -275,4 +284,3 @@ export function RadarMap({ targets }: RadarMapProps) {
 
   return <div ref={mapNodeRef} className="radar-map" />;
 }
-
