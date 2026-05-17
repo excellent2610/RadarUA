@@ -34,7 +34,7 @@ export async function cloudGetItem(key: string): Promise<string | null> {
   const wa = window.Telegram?.WebApp;
   if (!wa?.CloudStorage) return null;
   return new Promise((resolve, reject) => {
-    wa.CloudStorage!.getItem(key, (err, value) => {
+    wa.CloudStorage!.getItem(key, (err: string | null, value: string | null) => {
       if (err) return reject(new Error(err));
       resolve(value ?? null);
     });
@@ -45,7 +45,7 @@ export async function cloudSetItem(key: string, value: string): Promise<boolean>
   const wa = window.Telegram?.WebApp;
   if (!wa?.CloudStorage) return false;
   return new Promise((resolve, reject) => {
-    wa.CloudStorage!.setItem(key, value, (err, ok) => {
+    wa.CloudStorage!.setItem(key, value, (err: string | null, ok: boolean) => {
       if (err) return reject(new Error(err));
       resolve(Boolean(ok));
     });

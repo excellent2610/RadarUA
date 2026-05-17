@@ -15,7 +15,7 @@ export function useTelegramHaptics(): Haptics {
   return {
     impact: (style = "light") => {
       try {
-        h.impactOccurred(style);
+        h.impactOccurred(style as any);
       } catch {
         // ignore
       }
@@ -29,11 +29,10 @@ export function useTelegramHaptics(): Haptics {
     },
     selectionChanged: () => {
       try {
-        h.selectionChanged();
+        (h as any).selectionChanged?.();
       } catch {
         // ignore
       }
     },
   };
 }
-
