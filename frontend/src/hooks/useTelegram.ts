@@ -18,7 +18,7 @@ export function useTelegram() {
 }
 
 export function triggerHaptic(style: "light" | "medium" | "heavy" = "light") {
-  window.Telegram?.WebApp.HapticFeedback?.impactOccurred(style);
+window.Telegram?.WebApp?.HapticFeedback?.impactOccurred(style);
 }
 
 export function telegramShareText() {

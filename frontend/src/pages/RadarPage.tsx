@@ -35,7 +35,7 @@ export function RadarPage() {
 
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden">
-      <RadarMap objects={visibleObjects} selectedId={selected?.id} onSelect={setSelected} />
+<RadarMap targets={visibleObjects} selectedId={selected?.id} onSelect={setSelected} />
 
       <div className="pointer-events-none absolute inset-0 z-[450] bg-[radial-gradient(circle_at_center,rgba(66,255,158,0.08),transparent_38%),linear-gradient(180deg,rgba(3,5,4,0.34),transparent_34%,rgba(3,5,4,0.72))]" />
       <div className="pointer-events-none absolute inset-0 z-[451] radar-grid" />

@@ -12,7 +12,7 @@ export function buildTargetHtml(target: ThreatTarget, zoomScale: number) {
   const style = THREAT_STYLE[target.type];
   const size = Math.round(style.size * zoomScale);
   const label = target.callsign ?? style.shortLabel;
-  const speed = Math.round(target.speedKmh);
+const speed = Math.round(target.speedKmh ?? target.speed_kmh ?? 0);
 
   return `
     <div class="target-marker target-${target.type}" style="--target-color:${style.color}; --target-glow:${style.glow}; --marker-size:${size}px;">

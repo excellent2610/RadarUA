@@ -50,10 +50,3 @@ export type TelegramWebApp = {
   onEvent: (event: string, cb: (...args: any[]) => void) => void;
   offEvent: (event: string, cb: (...args: any[]) => void) => void;
 };
-
-declare global {
-  interface Window {
-    Telegram?: { WebApp?: TelegramWebApp };
-  }
-}
-
