@@ -12,5 +12,10 @@ i18n.use(initReactI18next).init({
   react: { useSuspense: false },
 });
 
-export default i18n;
+export function translate(key: string, options?: Record<string, unknown>) {
+  return i18n.t(key, options as any) as unknown as string;
+}
 
+export { useTranslation } from "react-i18next";
+
+export default i18n;

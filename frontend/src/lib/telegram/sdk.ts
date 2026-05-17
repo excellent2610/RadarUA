@@ -31,30 +31,23 @@ export function exitFullscreen(): boolean {
 }
 
 export async function cloudGetItem(key: string): Promise<string | null> {
-  return withWebApp(
-    (wa) =>
-      new Promise((resolve, reject) => {
-        if (!wa.CloudStorage) return resolve(null);
-        wa.CloudStorage.getItem(key, (err, value) => {
-          if (err) return reject(new Error(err));
-          resolve(value ?? null);
-        });
-      }),
-    Promise.resolve(null),
-  );
+  const wa = window.Telegram?.WebApp;
+  if (!wa?.CloudStorage) return null;
+  return new Promise((resolve, reject) => {
+    wa.CloudStorage!.getItem(key, (err, value) => {
+      if (err) return reject(new Error(err));
+      resolve(value ?? null);
+    });
+  });
 }
 
 export async function cloudSetItem(key: string, value: string): Promise<boolean> {
-  return withWebApp(
-    (wa) =>
-      new Promise((resolve, reject) => {
-        if (!wa.CloudStorage) return resolve(false);
-        wa.CloudStorage.setItem(key, value, (err, ok) => {
-          if (err) return reject(new Error(err));
-          resolve(Boolean(ok));
-        });
-      }),
-    Promise.resolve(false),
-  );
+  const wa = window.Telegram?.WebApp;
+  if (!wa?.CloudStorage) return false;
+  return new Promise((resolve, reject) => {
+    wa.CloudStorage!.setItem(key, value, (err, ok) => {
+      if (err) return reject(new Error(err));
+      resolve(Boolean(ok));
+    });
+  });
 }
-

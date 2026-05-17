@@ -1,78 +1,71 @@
-export type ThreatType = "shahed" | "cruise_missile" | "ballistic" | "kab" | "jet_uav";
+export type ThreatType =
+  | "shahed"
+  | "drone"
+  | "jet_drone"
+  | "cruise_missile"
+  | "ballistic_missile"
+  | "bomb"
+  | "kab"
+  | "unknown";
 
-export type ThreatStatus = "active" | "stale" | "expired";
+export type ThreatStatus = "active" | "eliminated" | "lost" | "expired" | "stale";
 
-export interface ThreatTarget {
+export type ThreatCoordinate = { lat: number; lng: number; ts?: number };
+
+export type ThreatObject = {
   id: string;
   type: ThreatType;
+  status: ThreatStatus;
   lat: number;
   lng: number;
-  heading: number;
-  speedKmh: number;
-  altitudeM?: number;
-  status?: ThreatStatus;
-  updatedAt: string;
-  callsign?: string;
-}
-
-export interface ThreatStyle {
-  label: string;
-  shortLabel: string;
-  color: string;
-  glow: string;
-  cone: string;
-  size: number;
-  dash?: string;
-  marker: "diamond" | "triangle" | "bolt" | "chevron" | "hex";
-}
-
-export const THREAT_STYLE: Record<ThreatType, ThreatStyle> = {
-  shahed: {
-    label: "Шахеди",
-    shortLabel: "SHD",
-    color: "#37f5a5",
-    glow: "rgba(55, 245, 165, 0.55)",
-    cone: "rgba(55, 245, 165, 0.16)",
-    size: 30,
-    marker: "diamond"
-  },
-  cruise_missile: {
-    label: "Крилаті ракети",
-    shortLabel: "CRM",
-    color: "#58d7ff",
-    glow: "rgba(88, 215, 255, 0.58)",
-    cone: "rgba(88, 215, 255, 0.15)",
-    size: 34,
-    marker: "triangle"
-  },
-  ballistic: {
-    label: "Балістика",
-    shortLabel: "BAL",
-    color: "#ff4f6d",
-    glow: "rgba(255, 79, 109, 0.62)",
-    cone: "rgba(255, 79, 109, 0.18)",
-    size: 40,
-    marker: "bolt"
-  },
-  kab: {
-    label: "КАБи",
-    shortLabel: "KAB",
-    color: "#ffd166",
-    glow: "rgba(255, 209, 102, 0.52)",
-    cone: "rgba(255, 209, 102, 0.15)",
-    size: 32,
-    marker: "hex"
-  },
-  jet_uav: {
-    label: "Реактивні БПЛА",
-    shortLabel: "J-UAV",
-    color: "#b692ff",
-    glow: "rgba(182, 146, 255, 0.58)",
-    cone: "rgba(182, 146, 255, 0.15)",
-    size: 36,
-    marker: "chevron"
-  }
+  heading?: number;
+  speedKmh?: number;
+  updatedAt: string; // ISO string
+  trail?: ThreatCoordinate[];
+  coordinates?: ThreatCoordinate;
+  meta?: Record<string, unknown>;
 };
 
-export const LIVE_UPDATE_MS = 6000;
+export type ThreatTarget = ThreatObject;
+
 export const MAX_TRAIL_POINTS = 22;
+
+export type CurrentResponse = {
+  updated_at: string;
+  objects: ThreatObject[];
+};
+
+export type ThreatStats = {
+  targets_total: number;
+  cache_refresh_seconds: number;
+};
+
+export type Filters = {
+  drones: boolean;
+  missiles: boolean;
+  ballistic: boolean;
+  bombs: boolean;
+  activeOnly: boolean;
+  eliminated: boolean;
+  lost: boolean;
+};
+
+export const THREAT_STYLE: Record<
+  ThreatType,
+  {
+    label: string;
+    color: string;
+    glow: string;
+    size: number;
+    pulse: "soft" | "medium" | "hard";
+  }
+> = {
+  shahed: { label: "Шахеди", color: "#20f7b1", glow: "rgba(32,247,177,0.65)", size: 46, pulse: "soft" },
+  drone: { label: "БПЛА", color: "#20f7b1", glow: "rgba(32,247,177,0.55)", size: 44, pulse: "soft" },
+  jet_drone: { label: "Реактивні БПЛА", color: "#b79cff", glow: "rgba(183,156,255,0.65)", size: 50, pulse: "medium" },
+  cruise_missile: { label: "Крилаті ракети", color: "#59c7ff", glow: "rgba(89,199,255,0.65)", size: 54, pulse: "medium" },
+  ballistic_missile: { label: "Балістика", color: "#ff4a6e", glow: "rgba(255,74,110,0.65)", size: 62, pulse: "hard" },
+  bomb: { label: "КАБ", color: "#ffd166", glow: "rgba(255,209,102,0.65)", size: 46, pulse: "soft" },
+  kab: { label: "КАБ", color: "#ffd166", glow: "rgba(255,209,102,0.65)", size: 46, pulse: "soft" },
+  unknown: { label: "Невідомо", color: "#8aa0aa", glow: "rgba(138,160,170,0.55)", size: 42, pulse: "soft" },
+};
